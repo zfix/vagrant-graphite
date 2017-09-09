@@ -1,0 +1,11 @@
+---
+- name: configure nginx
+  copy:
+          src: nginx
+          dest: /etc/
+- name: unlink old default site
+  command: /usr/bin/unlink /etc/nginx/sites-enabled/default
+- name: Restart nginx
+  service:
+          name: nginx
+          state: restarted

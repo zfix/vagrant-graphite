@@ -1,0 +1,21 @@
+---
+- name: Locales fix
+  command: locale-gen ru_RU.UTF-8
+- name: Install packages
+  apt: name={{item}} update_cache=yes
+  with_items:
+        - vim-nox
+        - snmpd
+        - build-essential
+        - libffi-dev
+        - python-cairo-dev
+        - git
+        - python-dev
+        - gunicorn
+        - python-pip
+        - nginx
+        - locate
+        - ipset
+        - mc
+- name: PIP upgrade
+  command: pip install --upgrade pip setuptools

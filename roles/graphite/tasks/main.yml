@@ -1,0 +1,36 @@
+---
+- name: Copy requirements
+  copy:
+          src: requirements.txt
+          dest: /tmp/
+- name: Modules Install
+  pip:
+          requirements: /tmp/requirements.txt
+          extra_args: "--no-binary=:all:"
+  environment:
+          PYTHONPATH: "/opt/graphite/lib:/opt/graphite/webapp"
+- name: Copy systemd units
+  copy:
+          src: systemd
+          dest: /etc
+- name: copy graphite configs
+  copy:
+          src: graphite
+          dest: /opt  
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+- command: chown -R www-data /opt/graphite/
+- name: init graphite
+  command: django-admin.py migrate --settings=graphite.settings --run-syncdb
+  environment:
+          PYTHONPATH: "/opt/graphite/webapp"
+  become_user: www-data
+
+- name: Start graphite
+  service:
+          name: carbon
+          state: started
+- name: Start graphite
+  service:
+          name: graphite-web
+          state: started  

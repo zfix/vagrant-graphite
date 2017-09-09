@@ -1,0 +1,8 @@
+---
+- hosts: zakazbox
+  become: yes
+  become_method: sudo
+  roles:
+          - common
+          - graphite
+          - nginx
